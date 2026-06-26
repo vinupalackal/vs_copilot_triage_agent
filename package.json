@@ -1,0 +1,108 @@
+{
+  "name": "vs-copilot-triage-agent",
+  "displayName": "VS Copilot Triage Agent",
+  "description": "Parses source code and triages logs to provide AI-powered summaries using GitHub Copilot",
+  "version": "0.1.0",
+  "publisher": "vinupalackal",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "copilot",
+    "triage",
+    "logs",
+    "source-analysis",
+    "ai"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "triageAgent.triageLogs",
+        "title": "Triage Agent: Triage Logs",
+        "category": "Triage Agent"
+      },
+      {
+        "command": "triageAgent.parseSourceCode",
+        "title": "Triage Agent: Parse Source Code",
+        "category": "Triage Agent"
+      },
+      {
+        "command": "triageAgent.triageAll",
+        "title": "Triage Agent: Parse Source & Triage Logs",
+        "category": "Triage Agent"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "triageAgent.triageLogs",
+          "when": "resourceExtname =~ /\\.(log|txt)$/",
+          "group": "triageAgent"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "triageAgent.triageLogs",
+          "when": "resourceExtname =~ /\\.(log|txt)$/",
+          "group": "triageAgent"
+        },
+        {
+          "command": "triageAgent.parseSourceCode",
+          "when": "resourceExtname =~ /\\.(ts|js|py|java|cs|cpp|c|go|rs)$/",
+          "group": "triageAgent"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "VS Copilot Triage Agent",
+      "properties": {
+        "triageAgent.maxLogLines": {
+          "type": "number",
+          "default": 500,
+          "description": "Maximum number of log lines to include in triage analysis"
+        },
+        "triageAgent.includeDiagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include VS Code diagnostics (errors/warnings) in the triage summary"
+        },
+        "triageAgent.model": {
+          "type": "string",
+          "default": "copilot-gpt-4o",
+          "description": "Language model to use for triage analysis"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "test:unit": "mocha --ui tdd --timeout 10000 out/test/logParser.test.js out/test/sourceParser.test.js",
+    "lint": "eslint src --ext ts"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.0.6"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.90.0",
+    "@typescript-eslint/eslint-plugin": "^7.11.0",
+    "@typescript-eslint/parser": "^7.11.0",
+    "@vscode/test-electron": "^2.4.0",
+    "eslint": "^8.57.0",
+    "glob": "^10.5.0",
+    "mocha": "^10.4.0",
+    "typescript": "^5.4.5"
+  }
+}
